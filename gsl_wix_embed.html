@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GSL Annual Report 2025</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@400&display=swap" rel="stylesheet"/>
+<style>
+/* ─── RESET ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; overflow-x: hidden; }
+body { font-family: 'Source Sans Pro', sans-serif; background: #F6F6F6; -webkit-font-smoothing: antialiased; }
+.page { width: 100%; }
+
+/* ══════════════════════════════════════════════════════════
+   DESKTOP  ≥ 1101px  —  Canvas: 1920 × 905px
+══════════════════════════════════════════════════════════ */
+.scene {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1920 / 905;
+  background: #F6F6F6;
+  overflow: hidden;
+}
+
+/* ── Background tree (desktop) ── */
+.deco-trunk { position: absolute; width: 16.505%; left: 42.506%; top: 59.380%; z-index: 1; }
+.deco-trunk svg { width: 100%; height: auto; display: block; }
+.deco-trunk-tablet { display: none; }
+
+.deco-ell-a {
+  position: absolute; width: 10.325%; aspect-ratio: 1/1;
+  left: 37.810%; top: 61.150%;
+  background: #E2F1E3; border-radius: 9999px; z-index: 1;
+}
+.deco-ell-b {
+  position: absolute; width: 6.471%; padding-bottom: 6.471%; height: 0;
+  left: 53.630%; top: 58.453%;
+  background: #E2F1E3; border-radius: 9999px; z-index: 4;
+}
+
+/* ── Circles ── */
+.circ {
+  position: absolute;
+  width: 26.615%; aspect-ratio: 1/1;
+  border-radius: 50%; overflow: hidden;
+  top: 12.376%;
+}
+.circ-seeds    { background: #FDD1A5; left: 10.052%; z-index: 2; }
+.circ-roots    { background: #FFC1CB; left: 36.667%; z-index: 3; }
+.circ-branches { background: #C7E2C8; left: 63.281%; z-index: 2; }
+
+/* ── Icon ── */
+.circ-icon { position: absolute; overflow: visible; }
+.circ-seeds .circ-icon,
+.circ-roots .circ-icon,
+.circ-branches .circ-icon { left: 57.14%; top: 10.18%; width: 19.18%; aspect-ratio: 1/1; }
+.circ-icon svg { width: 100%; height: 100%; display: block; }
+
+/* ══════════════════════════════════════════════════════════
+   TEXT CONTENT GROUP
+   All four text elements live inside .circ-content so they
+   move as one block. padding-bottom: 10px ensures no text
+   touches the circle's curved bottom edge.
+══════════════════════════════════════════════════════════ */
+.circ-content {
+  position: absolute;
+  /* Left edge: same 20.745% for Seeds/Roots; overridden per circle */
+  left:   20.745%;
+  right:  8%;          /* keeps text away from right curve */
+  top:    24.07%;      /* starts at title position */
+  bottom: 10px;        /* 10px clearance from bottom of circle */
+  overflow: hidden;    /* clip if content still overflows circle bottom */
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.circ-branches .circ-content { left: 20.745%; }
+
+/* ── Title ── */
+.circ-title {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-weight: 700;
+  font-size: clamp(11px, 0.9375vw, 18px);
+  line-height: 1.4;
+  color: #000;
+  white-space: nowrap;
+  flex-shrink: 0;
+  text-wrap: balance;
+}
+
+/* ── Rule ── */
+.circ-rule { height: 2px; flex-shrink: 0; margin: 0.3em 0 0.45em; }
+.circ-seeds    .circ-rule { width: 28.18%; background: #FFA449; }
+.circ-roots    .circ-rule { width: 29.35%; background: #F8546D; }
+.circ-branches .circ-rule { width: 28.96%; background: #69CE6C; }
+/* Rule width is % of .circ-content width — keep proportional */
+
+/* ── Subtitle ── */
+.circ-meta {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: clamp(10px, 0.8333vw, 16px);
+  line-height: 1.4;
+  color: #000;
+  flex-shrink: 0;
+  margin-bottom: 0.6em;
+  text-wrap: balance;
+  word-spacing: -0.01em;
+}
+
+/* ── Body ── */
+.circ-body {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: clamp(9.5px, 0.8333vw, 16px);
+  line-height: 1.4;
+  color: #000;
+  padding-bottom: 10px;
+  padding-right: 20px;   /* 20px narrower on the right, left stays aligned */
+  text-wrap: pretty;
+  overflow-wrap: break-word;
+}
+
+/* ══════════════════════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════════════════════ */
+.footer-banner {
+  width: 100%; background: #CBE2EC;
+  backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px);
+  display: flex; align-items: center; justify-content: center;
+  min-height: clamp(80px, 9.115vw, 175px);
+  padding: clamp(20px, 3.5vw, 56px) clamp(24px, 10vw, 200px);
+}
+.footer-banner p {
+  font-family: 'Playfair Display', serif; font-weight: 400;
+  font-size: clamp(16px, 1.667vw, 32px); line-height: 1.4;
+  text-align: center; color: #000;
+  max-width: clamp(300px, 58vw, 1114px);
+  text-wrap: balance;
+}
+.footer-mobile  { display: none; }
+.footer-desktop { display: block; }
+
+/* ══════════════════════════════════════════════════════════
+   TABLET  769px – 1100px  —  Canvas: 1027 × 1366px
+══════════════════════════════════════════════════════════ */
+@media (min-width: 769px) and (max-width: 1100px) {
+  .scene { aspect-ratio: 1027 / 1366; }
+  .circ { width: 49.756%; top: 8.052%; }
+  .circ-seeds    { left:  0.292%; z-index: 2; }
+  .circ-roots    { left: 49.951%; z-index: 3; }
+  .circ-branches { left: 25.122%; top: 40.263%; z-index: 4; }
+
+  .deco-trunk { display: none; }
+  .deco-trunk-tablet {
+    display: block; position: absolute;
+    left: 38.851%; top: 71.228%; width: 22.102%; z-index: 1;
+  }
+  .deco-trunk-tablet svg { width: 100%; height: auto; display: block; }
+  .deco-ell-a { left: 31.938%; top: 74.231%; width: 13.827%; aspect-ratio: 1/1; padding-bottom: unset; height: unset; z-index: 2; }
+  .deco-ell-b { left: 53.749%; top: 70.790%; width: 8.667%; padding-bottom: 8.667%; height: 0; z-index: 5; }
+
+  .circ-title { font-size: clamp(12px, 1.753vw, 18px); }
+  .circ-meta  { font-size: clamp(11px, 1.558vw, 16px); }
+  .circ-body  { font-size: clamp(10px, 1.558vw, 16px); }
+  .footer-banner p { font-size: clamp(14px, 1.753vw, 18px); }
+}
+
+/* ══════════════════════════════════════════════════════════
+   MOBILE  ≤ 768px  —  Figma canvas: 402 × 1729px
+   Circles: 511×511px, centered on viewport
+   All text: center-aligned, matching Figma positions exactly
+══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .scene {
+    position: relative; width: 100%; height: 1729px;
+    overflow: hidden; aspect-ratio: unset; display: block;
+  }
+  .deco-trunk { display: none; }
+
+  /* ── Circles: 511×511, centered ── */
+  .circ {
+    position: absolute; width: 511px; height: 511px;
+    padding-bottom: 0; aspect-ratio: unset;
+    border-radius: 50%; overflow: hidden;
+    left: 50%; transform: translateX(-50%);
+  }
+  .circ-seeds    { top:  93px; z-index: 2; }
+  .circ-roots    { top: 509px; z-index: 3; }
+  .circ-branches { top: 920px; z-index: 4; }
+
+  /* ── Icon: centered horizontally, Figma top values ──
+     Icon is 94px wide → center offset = 94/2 = 47px */
+  .circ-seeds    .circ-icon,
+  .circ-roots    .circ-icon,
+  .circ-branches .circ-icon {
+    left: calc(50% - 47px);
+    width: 94px; height: 94px;
+    aspect-ratio: unset;
+  }
+  .circ-seeds    .circ-icon { top: 25px; }
+  .circ-roots    .circ-icon { top: 30px; }
+  .circ-branches .circ-icon { top: 37px; }
+
+  /* ── Content group: full circle width, centered, flex column ──
+     Top = Figma title position per circle.
+     Bottom = 10px clearance from circle edge. */
+  .circ-content {
+    left: 0; right: 0;
+    bottom: 10px;
+    overflow: hidden;
+    align-items: center;
+    text-align: center;
+  }
+  .circ-seeds    .circ-content { top: 134px; }
+  .circ-roots    .circ-content { top: 139px; }
+  /* left/right explicitly overrides the higher-specificity desktop rule on line 78 */
+  .circ-branches .circ-content { top: 151px; left: 0; right: 0; }
+
+  /* ── Title ── */
+  .circ-title {
+    font-size: 18px !important;
+    line-height: 1.4 !important;
+    white-space: nowrap;
+    text-align: center;
+    width: 100%;
+  }
+
+  /* ── Rule: centered, fixed width ── */
+  .circ-rule {
+    height: 2px !important;
+    width: 80px !important;  /* centred under title */
+    margin: 5px auto 8px !important;
+    display: block;
+  }
+
+  /* ── Subtitle ── */
+  .circ-meta {
+    font-size: 16px !important;
+    line-height: 1.4 !important;
+    text-align: center;
+    width: 100%;
+    padding: 0 15%;
+  }
+
+  /* ── Body: centered, Figma widths ── */
+  .circ-body {
+    font-size: 16px !important;
+    line-height: 1.4 !important;
+    text-align: center;
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 10px;
+  }
+  /* Figma body widths: Seeds 326px, Roots 286px, Branches 308px */
+  .circ-seeds    .circ-body { padding-left: 18%; padding-right: 18%; }
+  .circ-roots    .circ-body { padding-left: 22%; padding-right: 22%; }
+  .circ-branches .circ-body { padding-left: 20%; padding-right: 20%; }
+
+  /* ── Tree decoration — exact Figma px positions ── */
+  .deco-trunk-tablet {
+    display: block; position: absolute;
+    left: calc(50% - 128.5px); top: 1327px; width: 303px; z-index: 1;
+  }
+  .deco-ell-a {
+    position: absolute; left: calc(50% - 190.5px); top: 1388px;
+    width: 142px; height: 142px; padding-bottom: 0; aspect-ratio: unset;
+    background: #E2F1E3; border-radius: 9999px; z-index: 2;
+  }
+  .deco-ell-b {
+    position: absolute; left: calc(50% + 75.5px); top: 1355px;
+    width: 115px; height: 115px; padding-bottom: 0;
+    background: #E2F1E3; border-radius: 9999px; z-index: 5;
+  }
+
+  /* ── Footer ── */
+  .footer-banner { min-height: 133px; padding: 20px 33px; }
+  .footer-banner p { font-size: 18px; line-height: 1.4; max-width: 100%; }
+  .footer-mobile  { display: block; }
+  .footer-desktop { display: none; }
+}
+
+.mobile-tree { display: none !important; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="scene">
+
+    <div class="deco-trunk">
+      <svg width="317" height="543" viewBox="0 0 317 543" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M316.89 15.9034L293.771 0L183.483 160.849L180.636 64.0241L115.615 54.6031L121.201 281.659L23.1187 138.593L0 154.496L122.473 333.129L127.8 548.624H194.87L184.885 208.408L316.89 15.9034Z" fill="#C2D2F0"/>
+      </svg>
+    </div>
+    <div class="deco-trunk-tablet">
+      <svg width="317" height="543" viewBox="0 0 317 543" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M316.89 15.9034L293.771 0L183.483 160.849L180.636 64.0241L115.615 54.6031L121.201 281.659L23.1187 138.593L0 154.496L122.473 333.129L127.8 548.624H194.87L184.885 208.408L316.89 15.9034Z" fill="#C2D2F0"/>
+      </svg>
+    </div>
+    <div class="deco-ell-a"></div>
+    <div class="deco-ell-b"></div>
+
+    <!-- ════ SEEDS ════ -->
+    <div class="circ circ-seeds">
+      <div class="circ-icon">
+        <svg width="94" height="94" viewBox="0 0 94 94" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="47" cy="47" r="47" fill="#FFA449"/>
+          <path d="M64.7397 37.7086C63.8121 44.7224 64.9778 43.6959 60.0544 48.9509C58.7915 50.3002 56.7173 50.3914 55.1011 50.9228C48.2164 50.5682 42.8152 48.6357 36.9725 45.1071C34.9686 43.8973 32.9101 43.0455 31.0425 41.5933C30.0963 40.8592 29.1135 40.2643 28.1957 39.4241C25.1058 36.5976 19.9454 31.7152 18.4944 27.8772C18.6742 25.4678 22.964 23.8751 24.8626 23.644C37.5818 22.1095 47.1818 23.5215 58.1581 30.4076C61.0542 32.2235 63.1019 34.5315 64.7379 37.7102L64.7397 37.7086Z" fill="#FDD1A5"/>
+          <path d="M73.7646 56.1449C74.1268 59.7596 73.4496 60.2229 73.0546 63.4989C72.3174 65.3727 71.3934 67.0651 70.4749 68.8446C69.3434 71.0363 68.0223 74.3232 65.9758 75.7305C64.6532 76.6399 63.4143 78.3029 61.6033 78.7851C59.6979 79.2926 56.8655 78.0484 55.1203 77.2228C54.5305 76.9443 54.2447 76.5053 54.1583 75.8983C53.7333 72.9078 53.7194 69.1197 54.7087 66.2196L56.2522 63.8518C58.4916 60.4158 61.2691 57.3591 64.7347 55.1205C65.8383 54.4077 67.112 54.0161 68.3163 53.5541C69.18 53.2226 72.6279 52.8327 73.1489 53.6559C73.6246 54.4096 73.6756 55.2519 73.7646 56.1449Z" fill="#E7C9E5"/>
+        </svg>
+      </div>
+      <div class="circ-content">
+        <div class="circ-title" data-en="The Seeds" data-es="las semillas">The Seeds</div>
+        <div class="circ-rule"></div>
+        <div class="circ-meta" data-en="Resources, Tools, &amp; Evidence<br/><em>The DNA of change.</em>" data-es="Recursos, herramientas y evidencia<br/><em>El ADN del cambio.</em>">Resources, Tools, &amp; Evidence<br/><em>The DNA of change.</em></div>
+        <div class="circ-body" data-en="Everything begins here. We plant the seeds of rigorous Actionable Evidence and scalable Resources &amp; Tools. These are the potent, replicable kernels of knowledge that prove how school leadership can drive change and provide the practical means to influence teaching and learning effectively." data-es="Todo comienza aquí. Sembramos las semillas de evidencia aplicable rigurosa y recursos y herramientas escalables. Estos son los núcleos de conocimiento potentes y replicables que demuestran cómo el liderazgo escolar puede impulsar el cambio y brindar los medios prácticos para influir en la enseñanza y el aprendizaje de manera efectiva.">Everything begins here. We plant the seeds of rigorous Actionable Evidence and scalable Resources &amp; Tools. These are the potent, replicable kernels of knowledge that prove how school leadership can drive change and provide the practical means to influence teaching and learning effectively.</div>
+      </div>
+    </div>
+
+    <!-- ════ ROOTS ════ -->
+    <div class="circ circ-roots">
+      <div class="circ-icon">
+        <svg width="94" height="94" viewBox="0 0 94 94" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="47" cy="47" r="47" fill="#FFD9DF"/>
+          <path d="M31.7896 54.869L17.2002 50.7917" stroke="#C7EFFF" stroke-width="6.03407" stroke-miterlimit="10"/>
+          <path d="M47.2905 39.3477L31.7896 54.869V67.8156" stroke="#75D1F7" stroke-width="6.03407" stroke-miterlimit="10"/>
+          <path d="M55.1283 30.0684H71.9016" stroke="#FFA6B4" stroke-width="6.03407" stroke-miterlimit="10"/>
+          <path d="M47.2856 20.6914L65.9183 39.324" stroke="#FFC1CB" stroke-width="6.03407" stroke-miterlimit="10"/>
+          <path d="M47.2856 49.6504L65.9183 68.2237" stroke="#69CE6C" stroke-width="6.03407" stroke-miterlimit="10"/>
+          <path d="M47.291 0V80.0601" stroke="#FF95A6" stroke-width="6.03407" stroke-miterlimit="10"/>
+          <path d="M47.2698 16.1553L28.1396 35.2855" stroke="#FF95A6" stroke-width="6.03407" stroke-miterlimit="10"/>
+        </svg>
+      </div>
+      <div class="circ-content">
+        <div class="circ-title" data-en="The Roots" data-es="Las raíces">The Roots</div>
+        <div class="circ-rule"></div>
+        <div class="circ-meta" data-en="Coalition Building &amp; Networks<br/><em>The anchor and source of sustenance</em>" data-es="Creación de coaliciones y redes<br/><em>El ancla y fuente de sustento</em>">Coalition Building &amp; Networks<br/><em>The anchor and source of sustenance</em></div>
+        <div class="circ-body" data-en="A tree cannot survive without a strong root system. Our Coalitions and Networks connect isolated efforts into a unified underground web of partners and funders, drawing on local wisdom to provide the stability needed for systemic resilience." data-es="Un árbol no puede sobrevivir sin un sistema de raíces fuerte. Nuestras Coaliciones y Redes conectan esfuerzos aislados, tejiendo una red subterránea de aliados y financiadores, aprovechando la sabiduría local para brindar la estabilidad necesaria que fortalece el sistema.">A tree cannot survive without a strong root system. Our Coalitions and Networks connect isolated efforts into a unified underground web of partners and funders, drawing on local wisdom to provide the stability needed for systemic resilience.</div>
+      </div>
+    </div>
+
+    <!-- ════ BRANCHES ════ -->
+    <div class="circ circ-branches">
+      <div class="circ-icon">
+        <svg width="94" height="94" viewBox="0 0 94 94" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M46.9688 93.5543C72.9089 93.5543 93.9376 72.6115 93.9376 46.7772C93.9376 20.9428 72.9089 0 46.9688 0C21.0286 0 0 20.9428 0 46.7772C0 72.6115 21.0286 93.5543 46.9688 93.5543Z" fill="#E1F9E1"/>
+          <mask id="branchMask" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="94" height="94">
+            <path d="M46.9688 93.5543C72.9089 93.5543 93.9376 72.6115 93.9376 46.7772C93.9376 20.9428 72.9089 0 46.9688 0C21.0286 0 0 20.9428 0 46.7772C0 72.6115 21.0286 93.5543 46.9688 93.5543Z" fill="#E1F9E1"/>
+          </mask>
+          <g mask="url(#branchMask)">
+            <path d="M67.4412 32.7783H60.5226V51.1538L42.5912 33.2622L37.7129 38.1847L70.1014 70.4997L40.4346 74.5753L41.3728 81.4528L76.2741 76.6586L112.373 112.675L117.251 107.752L67.4412 58.0562V32.7783Z" fill="#C2D2F0"/>
+          </g>
+        </svg>
+      </div>
+      <div class="circ-content">
+        <div class="circ-title" data-en="The Branches" data-es="las ramas">The Branches</div>
+        <div class="circ-rule"></div>
+        <div class="circ-meta" data-en="Training &amp; Consultancy<br/><em>The reach and the shelter</em>" data-es="Formación y consultoría<br/><em>El alcance y el refugio</em>">Training &amp; Consultancy<br/><em>The reach and the shelter</em></div>
+        <div class="circ-body" data-en="Finally, the tree extends outward. Through Training and Strategic Consultancy, we branch out to touch school leaders and government systems in partnership with local organizations, offering the support necessary for schools to thrive." data-es="Finalmente, el árbol se extiende hacia afuera. A través de la capacitación y la consultoría estratégica, nos expandimos para llegar a los líderes escolares y los sistemas gubernamentales en asociación con organizaciones locales, ofreciendo el apoyo necesario para que las escuelas prosperen.">Finally, the tree extends outward. Through Training and Strategic Consultancy, we branch out to touch school leaders and government systems in partnership with local organizations, offering the support necessary for schools to thrive.</div>
+      </div>
+    </div>
+
+  </div><!-- /scene -->
+
+  <!-- ════════════ FOOTER ════════════ -->
+  <footer class="footer-banner">
+    <p class="footer-desktop"
+       data-en="This report outlines how we have cultivated the field in 2025 to support the growth of school leaders everywhere."
+       data-es="Este informe describe cómo hemos cultivado el campo en 2025 para apoyar el crecimiento de los líderes escolares en todas partes.">This report outlines how we have cultivated the field in 2025 to support the growth of school leaders everywhere.</p>
+    <p class="footer-mobile"
+       data-en="This report outlines how we have<br/>cultivated the field in 2025 to support the<br/>growth of school leaders everywhere."
+       data-es="Este informe describe cómo hemos cultivado<br/>el campo en 2025 para apoyar el crecimiento<br/>de los líderes escolares en todas partes.">This report outlines how we have<br/>cultivated the field in 2025 to support the<br/>growth of school leaders everywhere.</p>
+  </footer>
+
+</div>
+
+<script>
+(function () {
+
+  var applying = false;
+
+  /* ══════════════════════════════════════════════════
+     LANGUAGE DETECTION — priority order:
+     1. html[lang] set by Wix Multilingual on the parent page
+        (propagates into the iframe via document.referrer / lang attr)
+     2. URL path  /es/  (Wix Multilingual URL prefix)
+     3. URL query ?lang=es or ?language=es
+     4. Browser navigator.language
+  ══════════════════════════════════════════════════ */
+  function detectLang() {
+    // 1. html[lang] on this document (Wix may set it)
+    var attr = (document.documentElement.lang || '').toLowerCase();
+    if (attr.startsWith('es')) return 'es';
+
+    // 2. URL path prefix  /es/
+    var path = window.location.pathname.toLowerCase();
+    if (path.indexOf('/es/') !== -1 || path.startsWith('/es')) return 'es';
+
+    // 3. Query string
+    var search = window.location.search.toLowerCase();
+    if (search.indexOf('lang=es') !== -1 || search.indexOf('language=es') !== -1) return 'es';
+
+    // 4. Browser / OS language preference
+    var nav = (navigator.language || navigator.userLanguage || '').toLowerCase();
+    if (nav.startsWith('es')) return 'es';
+
+    return 'en';
+  }
+
+  /* ══════════════════════════════════════════════════
+     AUTO HEIGHT — reports scroll height to Wix parent
+     so the HTML iFrame element resizes to fit content.
+  ══════════════════════════════════════════════════ */
+  function reportHeight() {
+    try {
+      window.parent.postMessage(
+        JSON.stringify({ type: 'gsl-height', height: document.body.scrollHeight }),
+        '*'
+      );
+    } catch (e) {}
+  }
+
+  /* ══════════════════════════════════════════════════
+     APPLY LANGUAGE
+  ══════════════════════════════════════════════════ */
+  function applyLang(lang) {
+    applying = true;
+    document.documentElement.lang = lang;
+    applying = false;
+    document.body.classList.toggle('lang-es', lang === 'es');
+    document.querySelectorAll('[data-en][data-es]').forEach(function (el) {
+      el.innerHTML = el.getAttribute('data-' + lang);
+    });
+    fixWidows();
+    reportHeight();
+  }
+
+  /* ══════════════════════════════════════════════════
+     WIDOW PREVENTION
+  ══════════════════════════════════════════════════ */
+  function fixWidows() {
+    ['.circ-body', '.circ-meta', '.footer-banner p'].forEach(function (sel) {
+      document.querySelectorAll(sel).forEach(function (el) {
+        el.childNodes.forEach(function (node) {
+          if (node.nodeType === 3) {
+            var t = node.textContent, i = t.lastIndexOf(' ');
+            if (i > -1) node.textContent = t.slice(0, i) + '\u00A0' + t.slice(i + 1);
+          }
+        });
+        var last = el.lastElementChild;
+        if (last) last.childNodes.forEach(function (node) {
+          if (node.nodeType === 3) {
+            var t = node.textContent, i = t.lastIndexOf(' ');
+            if (i > -1) node.textContent = t.slice(0, i) + '\u00A0' + t.slice(i + 1);
+          }
+        });
+      });
+    });
+  }
+
+  /* ── Init ── */
+  applyLang(detectLang());
+
+  /* Watch html[lang] — Wix Multilingual updates this attribute */
+  var observer = new MutationObserver(function () {
+    if (applying) return;
+    applyLang(detectLang());
+  });
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+
+  /* Poll for Wix SPA URL changes */
+  var lastHref = window.location.href;
+  setInterval(function () {
+    if (window.location.href !== lastHref) {
+      lastHref = window.location.href;
+      applyLang(detectLang());
+    }
+  }, 300);
+
+  /* Re-report height on resize (device rotation, zoom, etc.) */
+  window.addEventListener('resize', reportHeight);
+  window.addEventListener('load', reportHeight);
+
+})();
+</script>
+</body>
+</html>
